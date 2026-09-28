@@ -44,8 +44,8 @@ SOURCES_ENABLED = {
 }
 
 # --- Email alerts (Gmail via IMAP) ------------------------------------------
-GMAIL_ADDRESS = os.environ.get("GMAIL_ADDRESS", "")
-GMAIL_APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD", "")
+GMAIL_ADDRESS = os.environ.get("GMAIL_ADDRESS", "").strip()
+GMAIL_APP_PASSWORD = "".join(os.environ.get("GMAIL_APP_PASSWORD", "").split())
 
 # Matched as a case-insensitive substring against each email's From header.
 BAYT_SENDER_HINTS = ["bayt.com"]
