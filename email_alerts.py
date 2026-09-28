@@ -100,6 +100,12 @@ def _connect() -> imaplib.IMAP4_SSL | None:
     if not config.GMAIL_ADDRESS or not config.GMAIL_APP_PASSWORD:
         logger.error("GMAIL_ADDRESS / GMAIL_APP_PASSWORD are not set; skipping email check.")
         return None
+
+    local, _, domain = config.GMAIL_ADDRESS.partition("@")
+    logger.info(
+        "email: address domain=%r, local-part length=%d, app password length=%d",
+        domain, len(local), len(config.GMAIL_APP_PASSWORD),
+    )
     try:
         imap = imaplib.IMAP4_SSL(IMAP_HOST, IMAP_PORT)
         imap.login(config.GMAIL_ADDRESS, config.GMAIL_APP_PASSWORD)
@@ -107,7 +113,6 @@ def _connect() -> imaplib.IMAP4_SSL | None:
     except imaplib.IMAP4.error as exc:
         logger.error("IMAP login failed: %s", exc)
         return None
-
 
 def _search_unseen_from(imap: imaplib.IMAP4_SSL, sender_hints: list[str]) -> list[bytes]:
     """Return message IDs of unseen mail whose From header contains any hint."""
